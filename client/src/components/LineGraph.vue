@@ -1,0 +1,33 @@
+<script>
+import {Line, mixins} from "vue-chartjs";
+const {reactiveProp} = mixins;
+
+export default {
+  name: "LineGraph",
+  extends: Line,
+  mixins: [reactiveProp],
+  props: {
+    title: String
+  },
+  mounted() {
+    this.renderChart(this.chartData, {
+      responsive: true,
+      showLine: true,
+      scales: {
+        xAxes: [{
+          type: "linear",
+          display: true,
+          scaleLabel: {
+            display: true
+          }
+        }]
+      },
+      title: {
+        display: true,
+        text: this.$props.title
+      },
+      maintainAspectRatio: false
+    });
+  }
+}
+</script>
