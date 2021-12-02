@@ -18,7 +18,16 @@ export default {
           type: "linear",
           display: true,
           scaleLabel: {
-            display: true
+            display: true,
+            labelString: "Time (s)"
+          }
+        }],
+        yAxes: [{
+          type: "linear",
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: "Raw"
           }
         }]
       },

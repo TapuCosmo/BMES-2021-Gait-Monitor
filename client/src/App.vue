@@ -2,7 +2,8 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">Graphs</router-link> |
-      <router-link to="/exportData">Export Data</router-link>
+      <router-link to="/exportData">Export/Import Data</router-link> |
+      <router-link to="/connectDevice">Connect Devices</router-link>
     </div>
     <router-view/>
   </div>

@@ -1,7 +1,13 @@
 <template>
-  <div class="sensor-graph">
-    <LineGraph class="graph" :chart-data="accGraphData" title="Accelerometer"/>
-    <LineGraph class="graph" :chart-data="gyrGraphData" title="Gyroscope"/>
+  <div>
+    <div class="sensor-graph">
+      <LineGraph class="graph" :chart-data="ankleAccGraphData" title="Accelerometer (Ankle)"/>
+      <LineGraph class="graph" :chart-data="ankleGyrGraphData" title="Gyroscope (Ankle)"/>
+    </div>
+    <div class="sensor-graph">
+      <LineGraph class="graph" :chart-data="kneeAccGraphData" title="Accelerometer (Knee)"/>
+      <LineGraph class="graph" :chart-data="kneeGyrGraphData" title="Gyroscope (Knee)"/>
+    </div>
   </div>
 </template>
 
@@ -14,57 +20,209 @@ export default {
     LineGraph
   },
   props: {
-    accData: Object,
-    gyrData: Object
+    leftAnkleData: Object,
+    leftKneeData: Object,
+    rightAnkleData: Object,
+    rightKneeData: Object,
   },
   computed: {
-    accGraphData() {
+    ankleAccGraphData() {
       return {
         datasets: [
           {
-            label: "x",
+            label: "x (Left)",
             fill: null,
             borderColor: "#ff0000",
-            data: this.$props.accData.x
+            data: this.$props.leftAnkleData.acc.x.map((d, i) => ({x: this.$props.leftAnkleData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftAnkle
           },
           {
-            label: "y",
+            label: "y (Left)",
             fill: null,
             borderColor: "#00ff00",
-            data: this.$props.accData.y
+            data: this.$props.leftAnkleData.acc.y.map((d, i) => ({x: this.$props.leftAnkleData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftAnkle
           },
           {
-            label: "z",
+            label: "z (Left)",
             fill: null,
             borderColor: "#0000ff",
-            data: this.$props.accData.z
+            data: this.$props.leftAnkleData.acc.z.map((d, i) => ({x: this.$props.leftAnkleData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftAnkle
+          },
+          {
+            label: "x (Right)",
+            fill: null,
+            borderColor: "#ff9999",
+            data: this.$props.rightAnkleData.acc.x.map((d, i) => ({x: this.$props.rightAnkleData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightAnkle
+          },
+          {
+            label: "y (Right)",
+            fill: null,
+            borderColor: "#99ff99",
+            data: this.$props.rightAnkleData.acc.y.map((d, i) => ({x: this.$props.rightAnkleData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightAnkle
+          },
+          {
+            label: "z (Right)",
+            fill: null,
+            borderColor: "#9999ff",
+            data: this.$props.rightAnkleData.acc.z.map((d, i) => ({x: this.$props.rightAnkleData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightAnkle
           }
         ]
       };
     },
-    gyrGraphData() {
+    ankleGyrGraphData() {
       return {
         datasets: [
           {
-            label: "x",
+            label: "x (Left)",
             fill: null,
             borderColor: "#ff0000",
-            data: this.$props.gyrData.x
+            data: this.$props.leftAnkleData.gyr.x.map((d, i) => ({x: this.$props.leftAnkleData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftAnkle
           },
           {
-            label: "y",
+            label: "y (Left)",
             fill: null,
             borderColor: "#00ff00",
-            data: this.$props.gyrData.y
+            data: this.$props.leftAnkleData.gyr.y.map((d, i) => ({x: this.$props.leftAnkleData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftAnkle
           },
           {
-            label: "z",
+            label: "z (Left)",
             fill: null,
             borderColor: "#0000ff",
-            data: this.$props.gyrData.z
+            data: this.$props.leftAnkleData.gyr.z.map((d, i) => ({x: this.$props.leftAnkleData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftAnkle
+          },
+          {
+            label: "x (Right)",
+            fill: null,
+            borderColor: "#ff9999",
+            data: this.$props.rightAnkleData.gyr.x.map((d, i) => ({x: this.$props.rightAnkleData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightAnkle
+          },
+          {
+            label: "y (Right)",
+            fill: null,
+            borderColor: "#99ff99",
+            data: this.$props.rightAnkleData.gyr.y.map((d, i) => ({x: this.$props.rightAnkleData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightAnkle
+          },
+          {
+            label: "z (Right)",
+            fill: null,
+            borderColor: "#9999ff",
+            data: this.$props.rightAnkleData.gyr.z.map((d, i) => ({x: this.$props.rightAnkleData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightAnkle
           }
         ]
       };
+    },
+    kneeAccGraphData() {
+      return {
+        datasets: [
+          {
+            label: "x (Left)",
+            fill: null,
+            borderColor: "#ff0000",
+            data: this.$props.leftKneeData.acc.x.map((d, i) => ({x: this.$props.leftKneeData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftKnee
+          },
+          {
+            label: "y (Left)",
+            fill: null,
+            borderColor: "#00ff00",
+            data: this.$props.leftKneeData.acc.y.map((d, i) => ({x: this.$props.leftKneeData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftKnee
+          },
+          {
+            label: "z (Left)",
+            fill: null,
+            borderColor: "#0000ff",
+            data: this.$props.leftKneeData.acc.z.map((d, i) => ({x: this.$props.leftKneeData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftKnee
+          },
+          {
+            label: "x (Right)",
+            fill: null,
+            borderColor: "#ff9999",
+            data: this.$props.rightKneeData.acc.x.map((d, i) => ({x: this.$props.rightKneeData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightKnee
+          },
+          {
+            label: "y (Right)",
+            fill: null,
+            borderColor: "#99ff99",
+            data: this.$props.rightKneeData.acc.y.map((d, i) => ({x: this.$props.rightKneeData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightKnee
+          },
+          {
+            label: "z (Right)",
+            fill: null,
+            borderColor: "#9999ff",
+            data: this.$props.rightKneeData.acc.z.map((d, i) => ({x: this.$props.rightKneeData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightKnee
+          }
+        ]
+      };
+    },
+    kneeGyrGraphData() {
+      return {
+        datasets: [
+          {
+            label: "x (Left)",
+            fill: null,
+            borderColor: "#ff0000",
+            data: this.$props.leftKneeData.gyr.x.map((d, i) => ({x: this.$props.leftKneeData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftKnee
+          },
+          {
+            label: "y (Left)",
+            fill: null,
+            borderColor: "#00ff00",
+            data: this.$props.leftAnkleData.gyr.y.map((d, i) => ({x: this.$props.leftKneeData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftKnee
+          },
+          {
+            label: "z (Left)",
+            fill: null,
+            borderColor: "#0000ff",
+            data: this.$props.leftAnkleData.gyr.z.map((d, i) => ({x: this.$props.leftKneeData.t[i] + this.leftGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.leftKnee
+          },
+          {
+            label: "x (Right)",
+            fill: null,
+            borderColor: "#ff9999",
+            data: this.$props.rightAnkleData.gyr.x.map((d, i) => ({x: this.$props.rightKneeData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightKnee
+          },
+          {
+            label: "y (Right)",
+            fill: null,
+            borderColor: "#99ff99",
+            data: this.$props.rightAnkleData.gyr.y.map((d, i) => ({x: this.$props.rightKneeData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightKnee
+          },
+          {
+            label: "z (Right)",
+            fill: null,
+            borderColor: "#9999ff",
+            data: this.$props.rightAnkleData.gyr.z.map((d, i) => ({x: this.$props.rightKneeData.t[i] + this.rightGraphOffset, y: d})),
+            hidden: !this.$store.state.graphVisibility.rightKnee
+          }
+        ]
+      };
+    },
+    leftGraphOffset() {
+      return this.$store.state.graphOffsets.left;
+    },
+    rightGraphOffset() {
+      return this.$store.state.graphOffsets.right;
     }
   }
 }
@@ -72,11 +230,12 @@ export default {
 
 <style scoped lang="scss">
 .sensor-graph {
-  height: 45vh;
+  height: 40vh;
   width: 98vw;
 }
 .graph {
   display: inline-block;
   width: 50%;
+  height: 100%;
 }
 </style>

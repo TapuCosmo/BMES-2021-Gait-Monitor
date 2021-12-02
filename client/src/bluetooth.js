@@ -36,13 +36,13 @@ export class BluetoothGaitMonitor {
       }
     }
   }
+}
 
-  static async requestDevice() {
-    const device = await navigator.bluetooth.requestDevice({
-      filters: [{
-        services: [config.uuids.primaryService]
-      }]
-    });
-    return device;
-  }
+export async function requestDevice() {
+  const device = await navigator.bluetooth.requestDevice({
+    filters: [{
+      services: [config.uuids.primaryService]
+    }]
+  });
+  return device;
 }

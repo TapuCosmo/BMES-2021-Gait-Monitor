@@ -1,8 +1,9 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import Graphs from "../views/Graphs";
-import ExportData from "../views/ExportData";
+import Graphs from "@/views/Graphs";
+import ExportData from "@/views/ExportData";
+import ConnectDevice from "@/views/ConnectDevice";
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,11 @@ const routes = [
     path: "/exportData",
     name: "ExportData",
     component: ExportData
+  },
+  {
+    path: "/connectDevice",
+    name: "ConnectDevice",
+    component: ConnectDevice
   }
 ]
 
