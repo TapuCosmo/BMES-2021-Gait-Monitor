@@ -35,7 +35,8 @@ export default {
         display: true,
         text: this.$props.title
       },
-      maintainAspectRatio: false
+      maintainAspectRatio: false,
+      animation: false
     });
   }
 }

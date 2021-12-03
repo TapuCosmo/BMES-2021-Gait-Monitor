@@ -1,3 +1,4 @@
+#include <Arduino.h>
 /*
     BMES GAIT MONITOR
 
@@ -54,12 +55,14 @@ long acc_x, acc_y, acc_z, acc_total_vector;
 float angle_roll_acc, angle_pitch_acc;
 float angle_pitch, angle_roll;
 int angle_pitch_buffer, angle_roll_buffer;
-float angle_pitch_output, angle_roll_output; 
+float angle_pitch_output, angle_roll_output;
 long loop_timer;
 int temp;
-boolean once = true; 
+boolean once = true;
 
-char buffer[36]="";
+char buffer[36] = "";
+void setup_MPU6050_registers();
+void read_MPU6050_data();
 
 void setup() {
   Serial.begin(115200);
@@ -68,11 +71,11 @@ void setup() {
   Serial.println("Setting up Accelerometers");
   Wire.begin();
   setup_MPU6050_registers();
-  Serial.println("1"); 
+  Serial.println("1");
   for (int cal_int = 0; cal_int < 1000; cal_int++) {
     Serial.println("geez");
     read_MPU6050_data();
-    Serial.println("read"); 
+    Serial.println("read");
     gyro_x_cal += gyro_x;
     gyro_y_cal += gyro_y;
     gyro_z_cal += gyro_z;
@@ -81,9 +84,9 @@ void setup() {
   gyro_x_cal /= 1000;
   gyro_y_cal /= 1000;
   gyro_z_cal /= 1000;
-  Serial.println("2"); 
-  loop_timer = micros(); 
-  
+  Serial.println("2");
+  loop_timer = micros();
+
 
   Serial.println("Setting up BLE");
 
@@ -129,7 +132,7 @@ void loop() {
 
     sprintf(buffer, "%05d,%05d,%05d,%05d,%05d,%05d", gyro_x, gyro_y, gyro_z, acc_x, acc_y, acc_z);
     Serial.println(buffer);
-    
+
     if (deviceConnected) {
         pCharacteristic->setValue(buffer);
         pCharacteristic->notify();
@@ -149,7 +152,7 @@ void loop() {
         // do stuff here on connecting
         oldDeviceConnected = deviceConnected;
     }
-  read_MPU6050_data(); 
+  read_MPU6050_data();
   gyro_x_cal -= gyro_x;
   gyro_y_cal -= gyro_y;
   gyro_z_cal -= gyro_z;
@@ -171,7 +174,7 @@ void loop() {
     set_gyro_angles = true;
   }
   //Serial.print(" ");
-  //Serial.println(acc_total_vector); 
+  //Serial.println(acc_total_vector);
   while(micros() - loop_timer < 4000);
   loop_timer = micros();
 }
@@ -181,7 +184,7 @@ void setup_MPU6050_registers() {
   Wire.write(byte(0x6B));
   Wire.write(byte(0x00));
   Wire.endTransmission(true);
-  
+
   Wire.beginTransmission(byte(0x68));
   Wire.write(byte(0x1C));
   Wire.write(byte(0x10));
@@ -191,17 +194,17 @@ void setup_MPU6050_registers() {
   Wire.write(byte(0x1B));
   Wire.write(byte(0x08));
   Wire.endTransmission(true);
-  
+
 }
 
 void read_MPU6050_data() {
   Wire.beginTransmission(byte(0x68));
   Wire.write(byte(0x3B));
-  Wire.endTransmission(false); 
+  Wire.endTransmission(false);
   Wire.requestFrom(byte(0x68), 14);
   if (once) {
     Serial.println(Wire.available());
-    once = false; 
+    once = false;
   }
   while (Wire.available() < 14);
   acc_x = Wire.read()<<8|Wire.read();

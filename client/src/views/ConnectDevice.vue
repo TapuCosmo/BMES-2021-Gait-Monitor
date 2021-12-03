@@ -15,26 +15,41 @@ export default {
     async connectDevice(side) {
       const device = await requestDevice();
       const monitor = new BluetoothGaitMonitor(device);
+      window.monitor = monitor;
       this.$store.dispatch("setBluetooth", {
         side,
         bluetoothMonitorInstance: monitor
       });
+      await monitor.connect();
       monitor.on("newValue", e => {
         const dv = e.target.value;
+        const decoder = new TextDecoder("ascii");
+        const text = decoder.decode(new Uint8Array(dv.buffer));
+        const data = text.split(",").map(n => parseInt(n));
         this.$store.dispatch("pushData", {
           side,
-          time: Date.now() / 1000,
-          location: dv.getUint8(0) == 0 ? "ankle" : "knee",
+          time: (Date.now() - this.$store.state.t0) / 1000,
+          location: "ankle", // dv.getUint8(0) == 0 ? "ankle" : "knee",
           data: {
+            // acc: {
+            //   x: dv.getInt16(1),
+            //   y: dv.getInt16(3),
+            //   z: dv.getInt16(5)
+            // },
+            // gyr: {
+            //   x: dv.getInt16(7),
+            //   y: dv.getInt16(9),
+            //   z: dv.getInt16(11)
+            // }
             acc: {
-              x: dv.getFloat32(1),
-              y: dv.getFloat32(5),
-              z: dv.getFloat32(9)
+              x: (data[3] < 2 ** 15) ? data[3] : -(2 ** 16 - data[3]),
+              y: (data[4] < 2 ** 15) ? data[4] : -(2 ** 16 - data[4]),
+              z: (data[5] < 2 ** 15) ? data[5] : -(2 ** 16 - data[5])
             },
             gyr: {
-              x: dv.getFloat32(13),
-              y: dv.getFloat32(17),
-              z: dv.getFloat32(21)
+              x: (data[0] < 2 ** 15) ? data[0] : -(2 ** 16 - data[0]),
+              y: (data[1] < 2 ** 15) ? data[1] : -(2 ** 16 - data[1]),
+              z: (data[2] < 2 ** 15) ? data[2] : -(2 ** 16 - data[2])
             }
           }
         });

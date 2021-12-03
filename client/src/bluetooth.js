@@ -1,7 +1,7 @@
 const config = {
   uuids: {
-    primaryService: "",
-    characteristic: ""
+    primaryService: "4fafc201-1fb5-459e-8fcc-c5c9c331914b",
+    characteristic: "beb5483e-36e1-4688-b7f5-ea07361b26a8"
   }
 };
 
@@ -11,8 +11,9 @@ export class BluetoothGaitMonitor {
   }
   async connect() {
     this.server = await this.device.gatt.connect();
-    this.service = this.server.getPrimaryService(config.uuids.primaryService);
-    this.characteristic = this.service.getCharacteristic(config.uuids.characteristic);
+    this.service = await this.server.getPrimaryService(config.uuids.primaryService);
+    this.characteristic = await this.service.getCharacteristic(config.uuids.characteristic);
+    await this.characteristic.startNotifications();
     return this.server;
   }
   disconnect() {
